@@ -1,27 +1,42 @@
 # SPDX-License-Identifier: MIT
 ---
-# Put the tasks for your role here.
-
 - name: Set platform/version specific variables
   include_tasks: tasks/set_vars.yml
 
-# Examples of some tasks:
 - name: Ensure required packages are installed
   package:
-    name: "{{ __template_packages }}"
+    name: "{{ __journald_packages }}"
     state: present
 
-- name: Ensure required services are enabled and started
+- name: Ensure required services are enabled
   service:
     name: "{{ item }}"
     state: started
     enabled: true
-  loop: "{{ __template_services }}"
+  loop: "{{ __journald_services }}"
 
-- name: Generate /etc/{{ __template_foo_config }}
+- name: Create journald configuration drop-in directory
+  file:
+    path: "{{ __journald_dropin_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configure persistent journal
+  include_tasks: tasks/persistent.yml
+  when: journald_persistent | bool
+
+- name: Configure volatile journal
+  include_tasks: tasks/volatile.yml
+  when: not (journald_persistent | bool)
+
+- name: Deploy journald configuration drop-in
   template:
-    src: "{{ __template_foo_config }}.j2"
-    dest: /etc/{{ __template_foo_config }}
-    backup: true
-    mode: 0400
-  notify: Template handler to restart services
+    src: journald.conf.j2
+    dest: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Restart journald services

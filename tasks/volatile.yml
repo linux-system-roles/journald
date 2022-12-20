@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Ensure volatile log store exists
+  file:
+    path: "{{ __journald_volatile_path }}"
+    state: directory
+    owner: root
+    group: systemd-journal
+    mode: '2755'
+
+- name: Apply tmpfiles.d snippet on volatile log store
+  command:
+    cmd: >
+      systemd-tmpfiles --create
+                       --prefix={{ __journald_volatile_path }}
+                       {{ __journald_tmpfiles }}
+  changed_when: false

@@ -1,7 +1,12 @@
 # SPDX-License-Identifier: MIT
 ---
-- name: Ensure that the role runs with default parameters
+- name: Simple journald role invocation
   hosts: all
+  vars:
+    journald_persistent: true
+    journald_max_disk_size: 2048
+    journald_per_user: true
+    journald_sync_interval: 1
   roles:
     - linux-system-roles.journald
 
@@ -21,26 +26,31 @@
       assert:
         that: systemctl.stdout == 'SubState=running'
 
-    - name: Verify that /run/log/journal/$MACHINE_ID/system.journal exists
+    - name: Verify that /var/log/journal/$MACHINE_ID/system.journal exists
       stat:
-        path: /run/log/journal/{{ ansible_machine_id }}/system.journal
+        path: /var/log/journal/{{ ansible_machine_id }}/system.journal
       register: __stat
       failed_when: not __stat.stat.exists
 
     - name: Verify that system.journal is in online state
       shell:
         cmd: >
-          set -euo pipefail;
           journalctl --header
-          --file /run/log/journal/{{ ansible_machine_id }}/system.journal |
+          --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
           grep -q 'State: ONLINE'
       changed_when: false
 
     - name: Verify that system.journal is compressed
       shell:
         cmd: >
-          set -euo pipefail;
           journalctl --header
-          --file /run/log/journal/{{ ansible_machine_id }}/system.journal |
+          --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
           grep -q COMPRESSED
+      changed_when: false
+
+    - name: Verify that system journal can have maximum size of 2.0G
+      shell:
+        cmd: >
+          journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
+          grep -q -E 'max( allowed)? 2.0G'
       changed_when: false

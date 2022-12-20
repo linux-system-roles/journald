@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Simple journald role invocation
+  hosts: all
+  vars:
+    journald_persistent: true
+    journald_max_disk_size: 2048
+    journald_per_user: true
+    journald_sync_interval: 1
+  roles:
+    - linux-system-roles.journald
