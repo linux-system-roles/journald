@@ -15,13 +15,13 @@
   service:
     name: "{{ item }}"
     state: started
-    enabled: yes
+    enabled: true
   loop: "{{ __template_services }}"
 
 - name: Generate /etc/{{ __template_foo_config }}
   template:
     src: "{{ __template_foo_config }}.j2"
     dest: /etc/{{ __template_foo_config }}
-    backup: yes
+    backup: true
     mode: 0400
-  notify: template handler to restart services
+  notify: Template handler to restart services
