@@ -19,3 +19,4 @@ exclude_paths:
   - examples/roles/
 mock_roles:
   - linux-system-roles.journald
+  - linux-system-roles.template
