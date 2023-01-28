@@ -1,77 +1,58 @@
-# Role Name
+# Journald
 ![template](https://github.com/linux-system-roles/template/workflows/tox/badge.svg)
 
-A template for an ansible role which configures some GNU/Linux subsystem or
-service. A brief description of the role goes here.
+This role provides an easy way to configure systemd-journald logging service.
 
 ## Requirements
-
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the `boto` package is required.
+This role uses only Ansible built-in modules.
 
 ## Role Variables
+Role allows system administrator to configure basic systemd-journald settings,
+through following set of variables which form role's public API.
 
-A description of all input variables (i.e. variables that are defined in
-`defaults/main.yml`) for the role should go here as these form an API of the
-role.
+- `journald_persistent` - boolean variable which governs where journald stores
+log file. When set to `true` the logs will be stored on disk in
+`/var/log/journal/`. Defaults to `false`, i.e. `volatile` journal storage.
 
-Variables that are not intended as input, like variables defined in
-`vars/main.yml`, variables that are read from other roles and/or the global
-scope (ie. hostvars, group vars, etc.) can be also mentioned here but keep in
-mind that as these are probably not part of the role API they may change during
-the lifetime.
+- `journald_max_disk_size` - integer variable, in megabytes, that governs how
+much disk space can journal files occupy before some of them are deleted.
+No implicit value is configured by the role, hence default sizing calculation
+described in `man 5 journald.conf` applies.
 
-Example of setting the variables:
+- `journald_max_files` - integer variable that governs how many journal files
+can be kept at maximum while respecting max disk size settings for journal.
+No implicit value is configured by default.
 
-```yaml
-template_foo: "oof"
-template_bar: "baz"
-```
+- `journald_max_file_size` - integer variable, in megabytes, describes maximum
+size of single journal file. No implicit configuration is set up by the role.
 
-### Variables Exported by the Role
+- `journald_per_user` - boolean variable, allows to configure whether journald
+should keep log data separate for each user, e.g. allowing unprivileged users
+to read system log from their own user services. Defaults to `true`. Note that
+per user journal files are available only when `journald_persistent: true`.
 
-This section is optional.  Some roles may export variables for playbooks to
-use later.  These are analogous to "return values" in Ansible modules.  For
-example, if a role performs some action that will require a system reboot, but
-the user wants to defer the reboot, the role might set a variable like
-`template_reboot_needed: true` that the playbook can use to reboot at a more
-convenient time.
+- `journald_compression` - boolean variable instructs journald to apply
+compression to journald data objects that are bigger then default 512 bytes.
+Defaults to `true`.
 
-Example:
-
-`template_reboot_needed` - default `false` - if `true`, this means
-a reboot is needed to apply the changes made by the role
-
-## Dependencies
-
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables
-that are used from other roles.
+- `journald_sync_interval` - integer variable, in minutes, configures the
+time span after which journald synchronizes currently used journal file to disk.
+By default role doesn't alter currently used value.
 
 ## Example Playbook
-
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
-
 ```yaml
 - hosts: all
   vars:
-    template_foo: "foo foo!"
-    template_bar: "progress bar"
-
+    journald_persistent: true
+    journald_max_disk_size: 2048
+    journald_per_user: true
+    journald_sync_interval: 1
   roles:
-    - linux-system-roles.template
+    - linux-system-roles.journald
 ```
 
-More examples can be provided in the [`examples/`](examples) directory. These
-can be useful especially for documentation.
-
 ## License
-
-Whenever possible, please prefer MIT.
+MIT
 
 ## Author Information
-
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+Michal Sekletar
