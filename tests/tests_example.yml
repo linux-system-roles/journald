@@ -35,6 +35,7 @@
     - name: Verify that system.journal is in online state
       shell:
         cmd: >
+          set -euo pipefail;
           journalctl --header
           --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
           grep -q 'State: ONLINE'
@@ -43,6 +44,7 @@
     - name: Verify that system.journal is compressed
       shell:
         cmd: >
+          set -euo pipefail;
           journalctl --header
           --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
           grep -q COMPRESSED
@@ -51,6 +53,7 @@
     - name: Verify that system journal can have maximum size of 2.0G
       shell:
         cmd: >
+          set -euo pipefail;
           journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
           grep -q -E 'max( allowed)? 2.0G'
       changed_when: false
