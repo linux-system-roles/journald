@@ -7,10 +7,13 @@
     journald_max_disk_size: 2048
     journald_per_user: true
     journald_sync_interval: 1
-  roles:
-    - linux-system-roles.journald
 
   tasks:
+    - name: Run the role
+      include_role:
+        name: linux-system-roles.journald
+        public: true
+
     # Make sure services are restarted before we verify system state is correct
     - name: Flush handlers
       meta: flush_handlers
@@ -57,3 +60,9 @@
           journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
           grep -q -E 'max( allowed)? 2.0G'
       changed_when: false
+
+    - name: Check generated files for ansible_managed, fingerprint
+      include_tasks: tasks/check_header.yml
+      vars:
+        __file: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+        __fingerprint: "system_role:journald"
