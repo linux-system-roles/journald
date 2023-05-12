@@ -16,7 +16,7 @@ This role provides an easy way to configure systemd-journald logging service.
 
 ## Requirements
 
-This role uses only Ansible built-in modules.
+None
 
 ## Role Variables
 
