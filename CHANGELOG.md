@@ -1,6 +1,14 @@
 Changelog
 =========
 
+[1.0.4] - 2023-05-26
+--------------------
+
+### Other Changes
+
+- docs: Consistent contributing.md for all roles - allow role specific contributing.md section
+- docs: use None for Requirements
+
 [1.0.3] - 2023-04-27
 --------------------
 
