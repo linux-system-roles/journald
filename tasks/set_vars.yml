@@ -1,6 +1,6 @@
 ---
 - name: Ensure ansible_facts used by role
   setup:
-    gather_subset: min
-  when: not ansible_facts.keys() | list |
-    intersect(__journald_required_facts) == __journald_required_facts
+    gather_subset: "{{ __journald_required_facts_subsets }}"
+  when: __journald_required_facts |
+    difference(ansible_facts.keys() | list) | length > 0
