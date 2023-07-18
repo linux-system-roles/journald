@@ -12,6 +12,7 @@ __journald_required_facts:
   - distribution
   - distribution_major_version
   - distribution_version
+  - machine_id
   - os_family
 # the subsets of ansible_facts that need to be gathered in case any of the
 # facts in required_facts is missing; see the documentation of
