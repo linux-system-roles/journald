@@ -14,10 +14,6 @@
 
 This role provides an easy way to configure systemd-journald logging service.
 
-## Requirements
-
-None
-
 ## Role Variables
 
 Role allows system administrator to configure basic systemd-journald settings,
