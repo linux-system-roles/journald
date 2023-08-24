@@ -1,16 +1,6 @@
-# Journald | [![Ansible Lint][ansible-lint-status]][ansible-lint] [![Ansible Plugin Scan][ansible-scan-status]][ansible-scan] [![Ansible Test][ansible-test-status]][ansible-test] [![Weekly CI trigger][weekly-test-status]][weekly-test]
+# Journald
 
-[ansible-lint]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-lint.yml
-[ansible-lint-status]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-lint.yml/badge.svg
-
-[ansible-scan]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-plugin-scan.yml
-[ansible-scan-status]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-plugin-scan.yml/badge.svg
-
-[ansible-test]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-test.yml
-[ansible-test-status]: https://github.com/linux-system-roles/journald/actions/workflows/ansible-test.yml/badge.svg
-
-[weekly-test]: https://github.com/linux-system-roles/journald/actions/workflows/weekly_ci.yml
-[weekly-test-status]: https://github.com/linux-system-roles/journald/actions/workflows/weekly_ci.yml/badge.svg
+[![ansible-lint.yml](https://github.com/linux-system-roles/journald/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/linux-system-roles/journald/actions/workflows/ansible-lint.yml) [![ansible-test.yml](https://github.com/linux-system-roles/journald/actions/workflows/ansible-test.yml/badge.svg)](https://github.com/linux-system-roles/journald/actions/workflows/ansible-test.yml) [![markdownlint.yml](https://github.com/linux-system-roles/journald/actions/workflows/markdownlint.yml/badge.svg)](https://github.com/linux-system-roles/journald/actions/workflows/markdownlint.yml) [![woke.yml](https://github.com/linux-system-roles/journald/actions/workflows/woke.yml/badge.svg)](https://github.com/linux-system-roles/journald/actions/workflows/woke.yml)
 
 This role provides an easy way to configure systemd-journald logging service.
 
