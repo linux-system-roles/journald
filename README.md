@@ -4,6 +4,20 @@
 
 This role provides an easy way to configure systemd-journald logging service.
 
+## Requirements
+
+See below
+
+### Collection requirements
+
+If you want to manage `rpm-ostree` systems with this role, you will need to
+install additional collections.  Please run the following command line to
+install the collection.
+
+```bash
+ansible-galaxy collection install -vv -r meta/collection-requirements.yml
+```
+
 ## Role Variables
 
 Role allows system administrator to configure basic systemd-journald settings,
@@ -50,6 +64,10 @@ By default role doesn't alter currently used value.
   roles:
     - linux-system-roles.journald
 ```
+
+## rpm-ostree
+
+See README-ostree.md
 
 ## License
 

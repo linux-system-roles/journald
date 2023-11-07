@@ -1,0 +1,1 @@
+roles/journald/.ostree/get_ostree_data.sh shebang!skip
