@@ -12,7 +12,7 @@ See below
 
 If you want to manage `rpm-ostree` systems with this role, you will need to
 install additional collections.  Please run the following command line to
-install the collection.
+install them:
 
 ```bash
 ansible-galaxy collection install -vv -r meta/collection-requirements.yml
