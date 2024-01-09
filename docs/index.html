@@ -195,6 +195,10 @@ then default 512 bytes. Defaults to <code>true</code>.</p></li>
 minutes, configures the time span after which journald synchronizes
 currently used journal file to disk. By default role doesn't alter
 currently used value.</p></li>
+<li><p><code>journald_forward_to_syslog</code> - boolean variable,
+control whether log messages received by the journal daemon shall be
+forwarded to a traditional syslog daemon. Defaults to
+<code>false</code>.</p></li>
 </ul>
 <h1 id="example-playbook">Example Playbook</h1>
 <div class="sourceCode" id="cb2"><pre
