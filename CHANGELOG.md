@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.2.0] - 2024-01-09
+--------------------
+
+### New Features
+
+- feat: Adding support for ForwardToSyslog (#54)
+
+### Other Changes
+
+- ci: support ansible-lint and ansible-test 2.16 (#52)
+- ci: Use supported ansible-lint action; run ansible-lint against the collection (#53)
+
 [1.1.1] - 2023-12-08
 --------------------
 
