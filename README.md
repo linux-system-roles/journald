@@ -52,6 +52,10 @@ Defaults to `true`.
 time span after which journald synchronizes currently used journal file to disk.
 By default role doesn't alter currently used value.
 
+- `journald_forward_to_syslog` - boolean variable, control whether log messages
+received by the journal daemon shall be forwarded to a traditional syslog daemon.
+Defaults to `false`.
+
 ## Example Playbook
 
 ```yaml
