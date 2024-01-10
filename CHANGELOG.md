@@ -1,6 +1,13 @@
 Changelog
 =========
 
+[1.2.1] - 2024-01-10
+--------------------
+
+### Bug Fixes
+
+- fix: ForwardToSyslog only set for volatile (#56)
+
 [1.2.0] - 2024-01-09
 --------------------
 
