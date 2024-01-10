@@ -29,9 +29,9 @@ RutimeMaxFiles={{ journald_max_files }}
 RuntimeMaxFileSize={{ journald_max_file_size }}M
 {% endif %}
 Compress={{ journald_compression | bool | ternary("yes", "no") }}
-ForwardToSyslog={{ journald_forward_to_syslog | bool | ternary("yes", "no") }}
 {# SyncInterval= #}
 {% if journald_sync_interval | int != 0 %}
 SyncIntervalSec={{ journald_sync_interval }}m
 {% endif %}
 {% endif %}
+ForwardToSyslog={{ journald_forward_to_syslog | bool | ternary("yes", "no") }}
