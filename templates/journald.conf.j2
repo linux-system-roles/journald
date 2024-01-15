@@ -6,32 +6,33 @@
 {# Persistent journal #}
 {% if journald_persistent | bool %}
 Storage=persistent
-{% if journald_max_disk_size | int != 0 %}
+{%   if journald_max_disk_size | int != 0 %}
 SystemMaxUse={{ journald_max_disk_size }}M
-{% endif %}
-{% if journald_max_files | int != 0 %}
+{%   endif %}
+{%   if journald_max_files | int != 0 %}
 SystemMaxFiles={{ journald_max_files }}
-{% endif %}    
-{% if journald_max_file_size | int != 0 %}
+{%   endif %}
+{%   if journald_max_file_size | int != 0 %}
 SystemMaxFileSize={{ journald_max_file_size }}M
-{% endif %}
+{%   endif %}
 SplitMode={{ journald_per_user | bool | ternary("uid", "none") }}
 {# Volatile journal #}
 {% else %}
 Storage=volatile
-{% if journald_max_disk_size | int != 0 %}
+{%   if journald_max_disk_size | int != 0 %}
 RuntimeMaxUse={{ journald_max_disk_size }}M
-{% endif %}
-{% if journald_max_files | int != 0 %}
-RutimeMaxFiles={{ journald_max_files }}
-{% endif %}
-{% if journald_max_file_size | int != 0 %}
+{%   endif %}
+{%   if journald_max_files | int != 0 %}
+RuntimeMaxFiles={{ journald_max_files }}
+{%   endif %}
+{%   if journald_max_file_size | int != 0 %}
 RuntimeMaxFileSize={{ journald_max_file_size }}M
+{%   endif %}
 {% endif %}
-Compress={{ journald_compression | bool | ternary("yes", "no") }}
-{# SyncInterval= #}
+{# end of storage specific settings #}
+{# settings below here apply to all storage types #}
 {% if journald_sync_interval | int != 0 %}
 SyncIntervalSec={{ journald_sync_interval }}m
 {% endif %}
-{% endif %}
+Compress={{ journald_compression | bool | ternary("yes", "no") }}
 ForwardToSyslog={{ journald_forward_to_syslog | bool | ternary("yes", "no") }}
