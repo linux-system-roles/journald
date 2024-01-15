@@ -56,7 +56,9 @@ unless otherwise indicated.
 
 - `journald_sync_interval` - integer variable, in minutes, configures the time
   span after which journald synchronizes the currently used journal file to
-  disk. By default role doesn't alter currently used value.
+  disk. By default role doesn't alter currently used value.  This setting is
+  only applicable for `journald_persistent: true`.  You will get a warning if
+  set otherwise.
 
 - `journald_forward_to_syslog` - boolean variable, control whether log messages
   received by the journal daemon shall be forwarded to a traditional syslog

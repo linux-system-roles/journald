@@ -3,6 +3,15 @@
 - name: Set platform/version specific variables
   include_tasks: tasks/set_vars.yml
 
+- name: Warn if journald_sync_interval is set in volatile mode
+  debug:
+    msg: >-
+      WARNING - journald_sync_interval should not be set when
+      journald_persistent: false
+  when:
+    - journald_sync_interval | int != 0
+    - not journald_persistent
+
 - name: Ensure required packages are installed
   package:
     name: "{{ __journald_packages }}"
