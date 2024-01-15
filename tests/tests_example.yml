@@ -7,62 +7,83 @@
     journald_max_disk_size: 2048
     journald_per_user: true
     journald_sync_interval: 1
+    journald_forward_to_syslog: true
 
   tasks:
-    - name: Run the role
-      include_role:
-        name: linux-system-roles.journald
-        public: true
+    - name: Run test
+      block:
+        - name: Run the role
+          include_role:
+            name: linux-system-roles.journald
+            public: true
 
-    # Make sure services are restarted before we verify system state is correct
-    - name: Flush handlers
-      meta: flush_handlers
+        # Make sure services are restarted before we verify system state
+        # is correct
+        - name: Flush handlers
+          meta: flush_handlers
 
-    - name: Get systemd-journald service state
-      command:
-        # noqa command-instead-of-module
-        cmd: systemctl show --property SubState systemd-journald.service
-      register: systemctl
-      changed_when: false
+        - name: Get systemd-journald service state
+          command:
+            # noqa command-instead-of-module
+            cmd: systemctl show --property SubState systemd-journald.service
+          register: systemctl
+          changed_when: false
 
-    - name: Verify that systemd-journald is running
-      assert:
-        that: systemctl.stdout == 'SubState=running'
+        - name: Verify that systemd-journald is running
+          assert:
+            that: systemctl.stdout == 'SubState=running'
 
-    - name: Verify that /var/log/journal/$MACHINE_ID/system.journal exists
-      stat:
-        path: /var/log/journal/{{ ansible_machine_id }}/system.journal
-      register: __stat
-      failed_when: not __stat.stat.exists
+        - name: Verify that syslog is set properly
+          command: >-
+            grep ForwardToSyslog=yes
+            "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+          changed_when: false
 
-    - name: Verify that system.journal is in online state
-      shell:
-        cmd: >
-          set -euo pipefail;
-          journalctl --header
-          --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
-          grep -q 'State: ONLINE'
-      changed_when: false
+        - name: Verify that /var/log/journal/$MACHINE_ID/system.journal exists
+          stat:
+            path: /var/log/journal/{{ ansible_machine_id }}/system.journal
+          register: __stat
+          failed_when: not __stat.stat.exists
 
-    - name: Verify that system.journal is compressed
-      shell:
-        cmd: >
-          set -euo pipefail;
-          journalctl --header
-          --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
-          grep -q COMPRESSED
-      changed_when: false
+        - name: Verify that system.journal is in online state
+          shell:
+            cmd: >
+              set -euo pipefail;
+              journalctl --header
+              --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
+              grep -q 'State: ONLINE'
+          changed_when: false
 
-    - name: Verify that system journal can have maximum size of 2.0G
-      shell:
-        cmd: >
-          set -euo pipefail;
-          journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
-          grep -q -E 'max( allowed)? 2.0G'
-      changed_when: false
+        - name: Verify that system.journal is compressed
+          shell:
+            cmd: >
+              set -euo pipefail;
+              journalctl --header
+              --file /var/log/journal/{{ ansible_machine_id }}/system.journal |
+              grep -q COMPRESSED
+          changed_when: false
 
-    - name: Check generated files for ansible_managed, fingerprint
-      include_tasks: tasks/check_header.yml
-      vars:
-        __file: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
-        __fingerprint: "system_role:journald"
+        - name: Verify that system journal can have maximum size of 2.0G
+          shell:
+            cmd: >
+              set -euo pipefail;
+              journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
+              grep -q -E 'max( allowed)? 2.0G'
+          changed_when: false
+
+        - name: Check generated files for ansible_managed, fingerprint
+          include_tasks: tasks/check_header.yml
+          vars:
+            __file: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+            __fingerprint: "system_role:journald"
+      always:
+        - name: Cleanup
+          file:
+            path: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+            state: absent
+
+        - name: Restart journald services
+          service:
+            name: "{{ item }}"
+            state: restarted
+          loop: "{{ __journald_services }}"
