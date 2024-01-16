@@ -151,8 +151,8 @@ Information</a></li>
 </ul>
 </nav>
 <hr>
-<p>This role provides an easy way to configure systemd-journald logging
-service.</p>
+<p>This role provides an easy way to configure the systemd-journald
+logging service.</p>
 <h1 id="requirements">Requirements</h1>
 <p>See below</p>
 <h2 id="collection-requirements">Collection requirements</h2>
@@ -162,14 +162,19 @@ following command line to install them:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ansible-galaxy</span> collection install <span class="at">-vv</span> <span class="at">-r</span> meta/collection-requirements.yml</span></code></pre></div>
 <h1 id="role-variables">Role Variables</h1>
-<p>Role allows system administrator to configure basic systemd-journald
-settings, through following set of variables which form role's public
-API.</p>
+<p>The role allows system administrator to configure basic
+systemd-journald settings, through the following set of variables which
+form the role's public API.</p>
 <ul>
-<li><p><code>journald_persistent</code> - boolean variable which governs
+<li><code>journald_persistent</code> - boolean variable which governs
 where journald stores log file. When set to <code>true</code> the logs
 will be stored on disk in <code>/var/log/journal/</code>. Defaults to
-<code>false</code>, i.e. <code>volatile</code> journal storage.</p></li>
+<code>false</code>, i.e. <code>volatile</code> journal storage.</li>
+</ul>
+<p><strong>NOTE</strong>: The following settings apply to both
+<code>persistent</code> and <code>volatile</code> modes unless otherwise
+indicated.</p>
+<ul>
 <li><p><code>journald_max_disk_size</code> - integer variable, in
 megabytes, that governs how much disk space can journal files occupy
 before some of them are deleted. No implicit value is configured by the
@@ -180,8 +185,8 @@ how many journal files can be kept at maximum while respecting max disk
 size settings for journal. No implicit value is configured by
 default.</p></li>
 <li><p><code>journald_max_file_size</code> - integer variable, in
-megabytes, describes maximum size of single journal file. No implicit
-configuration is set up by the role.</p></li>
+megabytes, describes the maximum size of single journal file. No
+implicit configuration is set up by the role.</p></li>
 <li><p><code>journald_per_user</code> - boolean variable, allows to
 configure whether journald should keep log data separate for each user,
 e.g. allowing unprivileged users to read system log from their own user
@@ -190,11 +195,13 @@ files are available only when
 <code>journald_persistent: true</code>.</p></li>
 <li><p><code>journald_compression</code> - boolean variable instructs
 journald to apply compression to journald data objects that are bigger
-then default 512 bytes. Defaults to <code>true</code>.</p></li>
+than default 512 bytes. Defaults to <code>true</code>.</p></li>
 <li><p><code>journald_sync_interval</code> - integer variable, in
-minutes, configures the time span after which journald synchronizes
+minutes, configures the time span after which journald synchronizes the
 currently used journal file to disk. By default role doesn't alter
-currently used value.</p></li>
+currently used value. This setting is only applicable for
+<code>journald_persistent: true</code>. You will get a warning if set
+otherwise.</p></li>
 <li><p><code>journald_forward_to_syslog</code> - boolean variable,
 control whether log messages received by the journal daemon shall be
 forwarded to a traditional syslog daemon. Defaults to
