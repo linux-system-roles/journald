@@ -16,9 +16,9 @@ SystemMaxFiles={{ journald_max_files }}
 SystemMaxFileSize={{ journald_max_file_size }}M
 {%   endif %}
 SplitMode={{ journald_per_user | bool | ternary("uid", "none") }}
-{% if journald_sync_interval | int != 0 %}
+{%   if journald_sync_interval | int != 0 %}
 SyncIntervalSec={{ journald_sync_interval }}m
-{% endif %}
+{%   endif %}
 {# Volatile journal #}
 {% else %}
 Storage=volatile
