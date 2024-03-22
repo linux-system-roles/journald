@@ -36,3 +36,5 @@ RuntimeMaxFileSize={{ journald_max_file_size }}M
 {# settings below here apply to all storage types #}
 Compress={{ journald_compression | bool | ternary("yes", "no") }}
 ForwardToSyslog={{ journald_forward_to_syslog | bool | ternary("yes", "no") }}
+RateLimitIntervalSec={{ journald_rate_limit_interval_sec }}s
+RateLimitBurst={{ journald_rate_limit_burst }}

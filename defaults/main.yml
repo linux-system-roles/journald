@@ -8,3 +8,5 @@ journald_per_user: false
 journald_compression: true
 journald_sync_interval: 0
 journald_forward_to_syslog: false
+journald_rate_limit_interval_sec: 30
+journald_rate_limit_burst: 10000
