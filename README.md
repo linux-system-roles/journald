@@ -64,6 +64,15 @@ unless otherwise indicated.
   received by the journal daemon shall be forwarded to a traditional syslog
   daemon. Defaults to `false`.
 
+- `journald_rate_limit_interval_sec` - integer variable, in seconds, configures the
+  time interval within which only `journald_rate_limit_burst` messages are handled.
+  See `man 5 journald.conf` for more information.
+
+- `journald_rate_limit_burst` - integer variable, sets the upper limit of messages
+  from a service which are handled within the time defined by
+  `journald_rate_limit_interval_sec`.
+  See `man 5 journald.conf` for more information.
+
 ## Example Playbook
 
 ```yaml
