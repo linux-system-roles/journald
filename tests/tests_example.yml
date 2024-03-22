@@ -8,6 +8,8 @@
     journald_per_user: true
     journald_sync_interval: 1
     journald_forward_to_syslog: true
+    journald_rate_limit_burst: 2000
+    journald_rate_limit_interval_sec: 2
 
   tasks:
     - name: Run test
@@ -36,6 +38,18 @@
         - name: Verify that syslog is set properly
           command: >-
             grep ForwardToSyslog=yes
+            "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+          changed_when: false
+
+        - name: Verify that rate limit interval is set properly
+          command: >-
+            grep RateLimitIntervalSec=2s
+            "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+          changed_when: false
+
+        - name: Verify that rate limit burst is set properly
+          command: >-
+            grep RateLimitBurst=2000
             "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
           changed_when: false
 
