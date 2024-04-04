@@ -1,6 +1,19 @@
 Changelog
 =========
 
+[1.3.0] - 2024-04-04
+--------------------
+
+### New Features
+
+- feat: Add options for rate limit interval and burst (#64)
+
+### Other Changes
+
+- ci: fix python unit test - copy pytest config to tests/unit (#62)
+- ci: Bump ansible/ansible-lint from 6 to 24 (#63)
+- ci: Bump mathieudutour/github-tag-action from 6.1 to 6.2 (#65)
+
 [1.2.3] - 2024-01-23
 --------------------
 
@@ -87,7 +100,6 @@ Changelog
   - Remove badges from README.md prior to converting to HTML
   
   Signed-off-by: Sergei Petrosian <spetrosi@redhat.com>
-
 
 [1.0.5] - 2023-07-19
 --------------------

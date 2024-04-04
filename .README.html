@@ -206,6 +206,14 @@ otherwise.</p></li>
 control whether log messages received by the journal daemon shall be
 forwarded to a traditional syslog daemon. Defaults to
 <code>false</code>.</p></li>
+<li><p><code>journald_rate_limit_interval_sec</code> - integer variable,
+in seconds, configures the time interval within which only
+<code>journald_rate_limit_burst</code> messages are handled. See
+<code>man 5 journald.conf</code> for more information.</p></li>
+<li><p><code>journald_rate_limit_burst</code> - integer variable, sets
+the upper limit of messages from a service which are handled within the
+time defined by <code>journald_rate_limit_interval_sec</code>. See
+<code>man 5 journald.conf</code> for more information.</p></li>
 </ul>
 <h1 id="example-playbook">Example Playbook</h1>
 <div class="sourceCode" id="cb2"><pre
