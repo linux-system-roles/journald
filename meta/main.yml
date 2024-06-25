@@ -3,12 +3,6 @@
 galaxy_info:
   author: Michal Sekletar <msekleta@redhat.com>
   description: Configure systemd-journald
-  galaxy_tags:
-    - journald
-    - logging
-    - rhel
-    - fedora
-    - centos
   company: Red Hat, Inc.
   license: MIT
   min_ansible_version: "2.9"
@@ -21,5 +15,14 @@ galaxy_info:
         - "7"
         - "8"
         - "9"
-
+  galaxy_tags:
+    - centos
+    - el7
+    - el8
+    - el9
+    - el10
+    - fedora
+    - journald
+    - logging
+    - rhel
 allow_duplicates: true
