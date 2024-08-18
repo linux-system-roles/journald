@@ -81,8 +81,9 @@
           shell:
             cmd: >
               set -euo pipefail;
-              journalctl -b -u systemd-journald -p info | grep max | tail -n 1 |
-              grep -q -E 'max( allowed)? 2.0G'
+              journalctl -b -u systemd-journald -p info |
+              grep -E "((System [Jj]ournal)|(Permanent journal)) .*max" | tail -n 1 |
+              grep -q -E 'max( allowed)? 2([.]0)?G'
           changed_when: false
 
         - name: Check generated files for ansible_managed, fingerprint
@@ -90,6 +91,18 @@
           vars:
             __file: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
             __fingerprint: "system_role:journald"
+
+      rescue:
+        - name: Debug
+          shell: |
+            set -x
+            exec 1>&2
+            journalctl -ex
+            journalctl -b -u systemd-journald
+            cat "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+          changed_when: false
+          failed_when: true
+
       always:
         - name: Cleanup
           file:
