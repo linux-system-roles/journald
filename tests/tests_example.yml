@@ -10,10 +10,45 @@
     journald_forward_to_syslog: true
     journald_rate_limit_burst: 2000
     journald_rate_limit_interval_sec: 2
+    __service_files:
+      - systemd-journald.service
+      - systemd-journal-flush.service
 
   tasks:
     - name: Run test
       block:
+        - name: Make a copy of the service files
+          copy:
+            src: /usr/lib/systemd/system/{{ item }}
+            dest: /etc/systemd/system/{{ item }}
+            remote_src: true
+            mode: preserve
+          loop: "{{ __service_files }}"
+
+        - name: Change the startlimit to avoid errors with excessive journald restarts
+          lineinfile:
+            path: /etc/systemd/system/{{ item }}
+            insertafter: ^\[Unit\]
+            line: StartLimitIntervalSec=0
+          loop: "{{ __service_files }}"
+
+        - name: Make a copy of the systemd-journald.service
+          copy:
+            src: /usr/lib/systemd/system/systemd-journald.service
+            dest: /etc/systemd/system/systemd-journald.service
+            remote_src: true
+            mode: preserve
+
+        - name: Change the startlimit to avoid errors with excessive journald restarts
+          lineinfile:
+            path: /etc/systemd/system/systemd-journald.service
+            insertafter: ^\[Unit\]
+            line: StartLimitIntervalSec=0
+
+        - name: Reload systemd to ensure startlimit changes take effect upon restart
+          systemd:
+            daemon_reload: true
+
         - name: Run the role
           include_role:
             name: linux-system-roles.journald
@@ -108,6 +143,16 @@
           file:
             path: "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
             state: absent
+
+        - name: Remove copy of the service files
+          file:
+            path: /etc/systemd/system/{{ item }}
+            state: absent
+          loop: "{{ __service_files }}"
+
+        - name: Reload systemd to cleanup
+          systemd:
+            daemon_reload: true
 
         - name: Restart journald services
           service:
