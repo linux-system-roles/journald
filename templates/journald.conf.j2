@@ -44,3 +44,6 @@ Compress={{ journald_compression | bool | ternary("yes", "no") }}
 ForwardToSyslog={{ journald_forward_to_syslog | bool | ternary("yes", "no") }}
 RateLimitIntervalSec={{ journald_rate_limit_interval_sec }}s
 RateLimitBurst={{ journald_rate_limit_burst }}
+{% if journald_max_retention | int != 0 %}
+MaxRetentionSec={{ journald_max_retention }}m
+{% endif %}
