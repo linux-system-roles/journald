@@ -19,6 +19,9 @@ SplitMode={{ journald_per_user | bool | ternary("uid", "none") }}
 {%   if journald_sync_interval | int != 0 %}
 SyncIntervalSec={{ journald_sync_interval }}m
 {%   endif %}
+{%   if journald_max_retention | int != 0 %}
+MaxRetentionSec={{ journald_max_retention }}m
+{%   endif %}
 {# Volatile journal #}
 {% else %}
 Storage=volatile
