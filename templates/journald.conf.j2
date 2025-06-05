@@ -19,8 +19,8 @@ SplitMode={{ journald_per_user | bool | ternary("uid", "none") }}
 {%   if journald_sync_interval | int != 0 %}
 SyncIntervalSec={{ journald_sync_interval }}m
 {%   endif %}
-{%   if journald_system_keep_free | int != 0 %}
-SystemKeepFree={{ journald_system_keep_free }}G
+{%   if journald_keep_free | int != 0 %}
+SystemKeepFree={{ journald_keep_free }}M
 {%   endif %}
 {# Volatile journal #}
 {% else %}

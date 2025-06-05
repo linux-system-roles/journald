@@ -10,4 +10,4 @@ journald_sync_interval: 0
 journald_forward_to_syslog: false
 journald_rate_limit_interval_sec: 30
 journald_rate_limit_burst: 10000
-journald_system_keep_free: 10
+journald_keep_free: 0
