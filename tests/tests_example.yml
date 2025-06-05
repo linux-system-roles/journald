@@ -10,6 +10,7 @@
     journald_forward_to_syslog: true
     journald_rate_limit_burst: 2000
     journald_rate_limit_interval_sec: 2
+    journald_system_keep_free: 10
     __service_files:
       - systemd-journald.service
       - systemd-journal-flush.service
@@ -85,6 +86,12 @@
         - name: Verify that rate limit burst is set properly
           command: >-
             grep RateLimitBurst=2000
+            "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
+          changed_when: false
+        
+        - name: Verify that system keep free is set properly
+          command: >-
+            grep SystemKeepFree=10
             "{{ __journald_dropin_dir }}/{{ __journald_dropin_conf }}"
           changed_when: false
 
