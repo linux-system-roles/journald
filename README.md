@@ -73,8 +73,8 @@ unless otherwise indicated.
   `journald_rate_limit_interval_sec`.
   See `man 5 journald.conf` for more information.
 
-- `journald_system_keep_free` - integer variable in gigabytes, sets the amount of
-  filesystem space in gigabytes that should be kept free if the system is close to
+- `journald_keep_free` - integer variable in megabytes, sets the amount of
+  filesystem space in megabytes that should be kept free if the system (persistent or volatile) is close to
   filling up.
   See `man 5 journald.conf` for more information
 
@@ -87,7 +87,7 @@ unless otherwise indicated.
     journald_max_disk_size: 2048
     journald_per_user: true
     journald_sync_interval: 1
-    journald_system_keep_free: 10
+    journald_keep_free: 10240
   roles:
     - linux-system-roles.journald
 ```
