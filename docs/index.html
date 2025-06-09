@@ -215,6 +215,10 @@ in seconds, configures the time interval within which only
 the upper limit of messages from a service which are handled within the
 time defined by <code>journald_rate_limit_interval_sec</code>. See
 <code>man 5 journald.conf</code> for more information.</p></li>
+<li><p><code>journald_keep_free</code> - integer variable in megabytes,
+sets the amount of filesystem space in megabytes that should be kept
+free if the system (persistent or volatile) is close to filling up. See
+<code>man 5 journald.conf</code> for more information</p></li>
 </ul>
 <h1 id="example-playbook">Example Playbook</h1>
 <div class="sourceCode" id="cb2"><pre
@@ -224,8 +228,9 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">journald_max_disk_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">2048</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">journald_per_user</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">journald_sync_interval</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">roles</span><span class="kw">:</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> linux-system-roles.journald</span></span></code></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">journald_keep_free</span><span class="kw">:</span><span class="at"> </span><span class="dv">10240</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> linux-system-roles.journald</span></span></code></pre></div>
 <h1 id="rpm-ostree">rpm-ostree</h1>
 <p>See README-ostree.md</p>
 <h1 id="license">License</h1>
