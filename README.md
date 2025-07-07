@@ -73,6 +73,10 @@ unless otherwise indicated.
   `journald_rate_limit_interval_sec`.
   See `man 5 journald.conf` for more information.
 
+- `journald_max_retention` - integer variable, in minutes,
+  sets how long journal entries can be retained before they are deleted.
+  No implicit value is configured by the role.
+
 ## Example Playbook
 
 ```yaml
