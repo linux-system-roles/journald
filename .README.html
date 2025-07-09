@@ -219,6 +219,9 @@ time defined by <code>journald_rate_limit_interval_sec</code>. See
 sets the amount of filesystem space in megabytes that should be kept
 free if the system (persistent or volatile) is close to filling up. See
 <code>man 5 journald.conf</code> for more information</p></li>
+<li><p><code>journald_max_retention</code> - integer variable, in
+minutes, sets how long journal entries can be retained before they are
+deleted. No implicit value is configured by the role.</p></li>
 </ul>
 <h1 id="example-playbook">Example Playbook</h1>
 <div class="sourceCode" id="cb2"><pre

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+[1.5.0] - 2025-07-09
+--------------------
+
+### New Features
+
+- feat: Add MaxRetention configuration (#113)
+
 [1.4.0] - 2025-06-16
 --------------------
 
