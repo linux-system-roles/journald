@@ -25,4 +25,6 @@ galaxy_info:
     - journald
     - logging
     - rhel
+    - leap
+    - sles
 allow_duplicates: true
