@@ -23,7 +23,7 @@
 
     - name: Verify that /run/log/journal/$MACHINE_ID/system.journal exists
       stat:
-        path: /run/log/journal/{{ ansible_machine_id }}/system.journal
+        path: /run/log/journal/{{ ansible_facts['machine_id'] }}/system.journal
       register: __stat
       failed_when: not __stat.stat.exists
 
@@ -32,7 +32,7 @@
         cmd: >
           set -euo pipefail;
           journalctl --header
-          --file /run/log/journal/{{ ansible_machine_id }}/system.journal |
+          --file /run/log/journal/{{ ansible_facts['machine_id'] }}/system.journal |
           grep -q 'State: ONLINE'
       changed_when: false
 
@@ -41,6 +41,6 @@
         cmd: >
           set -euo pipefail;
           journalctl --header
-          --file /run/log/journal/{{ ansible_machine_id }}/system.journal |
+          --file /run/log/journal/{{ ansible_facts['machine_id'] }}/system.journal |
           grep -q COMPRESSED
       changed_when: false
