@@ -52,9 +52,9 @@
             daemon_reload: true
 
         - name: Run the role
-          include_role:
-            name: linux-system-roles.journald
-            public: true
+          include_tasks: tasks/run_role_with_clear_facts.yml
+          vars:
+            __sr_public: true
 
         # Make sure services are restarted before we verify system state
         # is correct
