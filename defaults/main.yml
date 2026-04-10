@@ -4,7 +4,7 @@ journald_persistent: false
 journald_max_disk_size: 0
 journald_max_files: 0
 journald_max_file_size: 0
-journald_per_user: false
+journald_per_user: true
 journald_compression: true
 journald_sync_interval: 0
 journald_forward_to_syslog: false
