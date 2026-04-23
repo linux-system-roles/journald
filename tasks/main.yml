@@ -51,3 +51,9 @@
     mode: '0644'
   notify:
     - Restart journald services
+
+- name: Record role success fingerprint
+  sr_fingerprint:
+    sr_message: >-
+      success system_role:journald ansible_version={{ ansible_version.full }}
+      {{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_version'] }}
