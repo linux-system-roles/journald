@@ -28,6 +28,7 @@ API.
 - `journald_persistent` - boolean variable which governs where journald stores
   log file. When set to `true` the logs will be stored on disk in
   `/var/log/journal/`. Defaults to `false`, i.e. `volatile` journal storage.
+  See also the `journald_per_user` setting below.
 
 **NOTE**: The following settings apply to both `persistent` and `volatile` modes
 unless otherwise indicated.
@@ -47,8 +48,11 @@ unless otherwise indicated.
 
 - `journald_per_user` - boolean variable, allows to configure whether journald
   should keep log data separate for each user, e.g. allowing unprivileged users
-  to read system log from their own user services. Defaults to `true`. Note that
-  per user journal files are available only when `journald_persistent: true`.
+  to read system log from their own user services. This setting corresponds to
+  the `journald.conf` setting `SplitMode`.  Defaults to `false`, which is the
+  same as `SplitMode=none`, which is different than the default journald.conf
+  setting of `SplitMode=uid`. Note that per user journal files are available
+  only when `journald_persistent: true`.
 
 - `journald_compression` - boolean variable instructs journald to apply
   compression to journald data objects that are bigger than default 512 bytes.
