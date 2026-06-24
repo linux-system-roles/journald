@@ -170,7 +170,8 @@ form the role's public API.</p>
 <li><code>journald_persistent</code> - boolean variable which governs
 where journald stores log file. When set to <code>true</code> the logs
 will be stored on disk in <code>/var/log/journal/</code>. Defaults to
-<code>false</code>, i.e. <code>volatile</code> journal storage.</li>
+<code>false</code>, i.e. <code>volatile</code> journal storage. See also
+the <code>journald_per_user</code> setting below.</li>
 </ul>
 <p><strong>NOTE</strong>: The following settings apply to both
 <code>persistent</code> and <code>volatile</code> modes unless otherwise
@@ -191,8 +192,11 @@ implicit configuration is set up by the role.</p></li>
 <li><p><code>journald_per_user</code> - boolean variable, allows to
 configure whether journald should keep log data separate for each user,
 e.g. allowing unprivileged users to read system log from their own user
-services. Defaults to <code>true</code>. Note that per user journal
-files are available only when
+services. This setting corresponds to the <code>journald.conf</code>
+setting <code>SplitMode</code>. Defaults to <code>false</code>, which is
+the same as <code>SplitMode=none</code>, which is different than the
+default journald.conf setting of <code>SplitMode=uid</code>. Note that
+per user journal files are available only when
 <code>journald_persistent: true</code>.</p></li>
 <li><p><code>journald_compression</code> - boolean variable instructs
 journald to apply compression to journald data objects that are bigger

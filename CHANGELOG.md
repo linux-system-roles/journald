@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.6.1] - 2026-06-24
+--------------------
+
+### Other Changes
+
+- ci: Bump actions/github-script from 8 to 9 (#156)
+- refactor: use ansible.posix 2.1.X for EL7 compatibility [citest_skip] (#157)
+- ci: Add config file for CodeRabbit with custom rules (#158)
+- ci: Skip reviews for PRs with [citest_skip] in the title (#159)
+- docs: journald_per_user default is different than journald.conf SplitMode [citest_skip] (#160)
+- test: remove unused files [citest_skip] (#161)
+
 [1.6.0] - 2026-04-28
 --------------------
 
