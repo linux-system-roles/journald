@@ -1,0 +1,355 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Verify invalid parameters are rejected
+  hosts: all
+  tasks:
+    - name: Run invalid input tests
+      block:
+        # ====================================================
+        # Section 1: Verify role works with valid defaults
+        # ====================================================
+        - name: Run role with valid defaults
+          ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+
+        - name: Mark valid defaults succeeded
+          ansible.builtin.set_fact:
+            __valid_defaults_succeeded: true
+
+        - name: Assert role completed with valid defaults
+          ansible.builtin.assert:
+            that:
+              - __valid_defaults_succeeded | default(false)
+            fail_msg: >-
+              Role should succeed with default parameters
+
+        # ====================================================
+        # Section 2: argument_specs validation (Ansible 2.11+)
+        # ====================================================
+        - name: Run argument specs validation tests
+          when: ansible_version.full is version("2.11", ">=")
+          block:
+            # --- Test: journald_persistent wrong type ---
+            - name: Argument specs reject non-boolean journald_persistent
+              block:
+                - name: Run role with non-boolean journald_persistent
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    journald_persistent: not_a_bool
+              rescue:
+                - name: Mark invalid journald_persistent type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_persistent_type_failed: true
+                  when: >-
+                    'journald_persistent' in
+                    (ansible_failed_result | default({}) | to_json)
+
+            - name: Assert invalid journald_persistent type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_persistent_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject journald_persistent values
+                  that are not booleans
+
+            # --- Test: journald_per_user wrong type ---
+            - name: Argument specs reject non-boolean journald_per_user
+              block:
+                - name: Run role with non-boolean journald_per_user
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    journald_per_user: not_a_bool
+              rescue:
+                - name: Mark invalid journald_per_user type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_per_user_type_failed: true
+                  when: >-
+                    'journald_per_user' in
+                    (ansible_failed_result | default({}) | to_json)
+
+            - name: Assert invalid journald_per_user type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_per_user_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject journald_per_user values
+                  that are not booleans
+
+            # --- Test: journald_compression wrong type ---
+            - name: Argument specs reject non-boolean journald_compression
+              block:
+                - name: Run role with non-boolean journald_compression
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    journald_compression: not_a_bool
+              rescue:
+                - name: Mark invalid journald_compression type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_compression_type_failed: true
+                  when: >-
+                    'journald_compression' in
+                    (ansible_failed_result | default({}) | to_json)
+
+            - name: Assert invalid journald_compression type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_compression_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject journald_compression values
+                  that are not booleans
+
+            # --- Test: journald_forward_to_syslog wrong type ---
+            - name: Argument specs reject non-boolean journald_forward_to_syslog
+              block:
+                - name: Run role with non-boolean journald_forward_to_syslog
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    journald_forward_to_syslog: not_a_bool
+              rescue:
+                - name: Mark invalid journald_forward_to_syslog type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_forward_type_failed: true
+                  when: >-
+                    'journald_forward_to_syslog' in
+                    (ansible_failed_result | default({}) | to_json)
+
+            - name: Assert invalid journald_forward_to_syslog type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_forward_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject journald_forward_to_syslog
+                  values that are not booleans
+
+            # --- Test: journald_max_disk_size wrong type ---
+            - name: Argument specs reject non-integer journald_max_disk_size
+              block:
+                - name: Run role with non-integer journald_max_disk_size
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    journald_max_disk_size: not_an_int
+              rescue:
+                - name: Mark invalid journald_max_disk_size type rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_max_disk_size_type_failed: true
+                  when: >-
+                    'journald_max_disk_size' in
+                    (ansible_failed_result | default({}) | to_json)
+
+            - name: Assert invalid journald_max_disk_size type was rejected
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_max_disk_size_type_failed | default(false)
+                fail_msg: >-
+                  argument_specs should reject journald_max_disk_size values
+                  that are not integers
+
+        # ====================================================
+        # Section 3: assert_role_vars validation (all versions)
+        # ====================================================
+
+        # --- Test: journald_max_disk_size out of range ---
+        - name: Assert rejects negative journald_max_disk_size
+          block:
+            - name: Run role with negative journald_max_disk_size
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_max_disk_size: -1
+          rescue:
+            - name: Mark negative journald_max_disk_size rejected
+              ansible.builtin.set_fact:
+                __invalid_input_max_disk_size_range_failed: true
+              when: >-
+                'journald_max_disk_size must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_max_disk_size was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_max_disk_size_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_max_disk_size when
+              given a negative value
+
+        # --- Test: journald_max_files out of range ---
+        - name: Assert rejects negative journald_max_files
+          block:
+            - name: Run role with negative journald_max_files
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_max_files: -1
+          rescue:
+            - name: Mark negative journald_max_files rejected
+              ansible.builtin.set_fact:
+                __invalid_input_max_files_range_failed: true
+              when: >-
+                'journald_max_files must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_max_files was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_max_files_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_max_files when given
+              a negative value
+
+        # --- Test: journald_max_file_size out of range ---
+        - name: Assert rejects negative journald_max_file_size
+          block:
+            - name: Run role with negative journald_max_file_size
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_max_file_size: -1
+          rescue:
+            - name: Mark negative journald_max_file_size rejected
+              ansible.builtin.set_fact:
+                __invalid_input_max_file_size_range_failed: true
+              when: >-
+                'journald_max_file_size must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_max_file_size was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_max_file_size_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_max_file_size when
+              given a negative value
+
+        # --- Test: journald_sync_interval out of range ---
+        - name: Assert rejects negative journald_sync_interval
+          block:
+            - name: Run role with negative journald_sync_interval
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_persistent: true
+                journald_sync_interval: -1
+          rescue:
+            - name: Mark negative journald_sync_interval rejected
+              ansible.builtin.set_fact:
+                __invalid_input_sync_interval_range_failed: true
+              when: >-
+                'journald_sync_interval must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_sync_interval was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_sync_interval_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_sync_interval when
+              given a negative value
+
+        # --- Test: journald_rate_limit_interval_sec out of range ---
+        - name: Assert rejects negative journald_rate_limit_interval_sec
+          block:
+            - name: Run role with negative journald_rate_limit_interval_sec
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_rate_limit_interval_sec: -1
+          rescue:
+            - name: Mark negative journald_rate_limit_interval_sec rejected
+              ansible.builtin.set_fact:
+                __invalid_input_rate_limit_interval_range_failed: true
+              when: >-
+                'journald_rate_limit_interval_sec must be a non-negative
+                integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_rate_limit_interval_sec was rejected
+          ansible.builtin.assert:
+            that:
+              - >-
+                __invalid_input_rate_limit_interval_range_failed
+                | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_rate_limit_interval_sec
+              when given a negative value
+
+        # --- Test: journald_rate_limit_burst out of range ---
+        - name: Assert rejects negative journald_rate_limit_burst
+          block:
+            - name: Run role with negative journald_rate_limit_burst
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_rate_limit_burst: -1
+          rescue:
+            - name: Mark negative journald_rate_limit_burst rejected
+              ansible.builtin.set_fact:
+                __invalid_input_rate_limit_burst_range_failed: true
+              when: >-
+                'journald_rate_limit_burst must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_rate_limit_burst was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_rate_limit_burst_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_rate_limit_burst when
+              given a negative value
+
+        # --- Test: journald_keep_free out of range ---
+        - name: Assert rejects negative journald_keep_free
+          block:
+            - name: Run role with negative journald_keep_free
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_keep_free: -1
+          rescue:
+            - name: Mark negative journald_keep_free rejected
+              ansible.builtin.set_fact:
+                __invalid_input_keep_free_range_failed: true
+              when: >-
+                'journald_keep_free must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_keep_free was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_keep_free_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_keep_free when given
+              a negative value
+
+        # --- Test: journald_max_retention out of range ---
+        - name: Assert rejects negative journald_max_retention
+          block:
+            - name: Run role with negative journald_max_retention
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                journald_max_retention: -1
+          rescue:
+            - name: Mark negative journald_max_retention rejected
+              ansible.builtin.set_fact:
+                __invalid_input_max_retention_range_failed: true
+              when: >-
+                'journald_max_retention must be a non-negative integer' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert negative journald_max_retention was rejected
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_max_retention_range_failed | default(false)
+            fail_msg: >-
+              assert_role_vars should reject journald_max_retention when
+              given a negative value
+
+      always:
+        - name: Clear test facts
+          ansible.builtin.set_fact:
+            __valid_defaults_succeeded:
+            __invalid_input_persistent_type_failed:
+            __invalid_input_per_user_type_failed:
+            __invalid_input_compression_type_failed:
+            __invalid_input_forward_type_failed:
+            __invalid_input_max_disk_size_type_failed:
+            __invalid_input_max_disk_size_range_failed:
+            __invalid_input_max_files_range_failed:
+            __invalid_input_max_file_size_range_failed:
+            __invalid_input_sync_interval_range_failed:
+            __invalid_input_rate_limit_interval_range_failed:
+            __invalid_input_rate_limit_burst_range_failed:
+            __invalid_input_keep_free_range_failed:
+            __invalid_input_max_retention_range_failed:
+          tags: tests::cleanup

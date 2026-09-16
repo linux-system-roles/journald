@@ -1,0 +1,101 @@
+# SPDX-License-Identifier: MIT
+---
+argument_specs:
+  main:
+    short_description: The journald role.
+    description: >
+      The journald role allows you to configure the systemd-journald
+      logging service.
+
+      This role manages persistent or volatile journal storage, disk
+      usage and file count limits, rate limiting, and forwarding to a
+      traditional syslog daemon.
+    options:
+      journald_persistent:
+        type: bool
+        default: false
+        description: >
+          Whether journald should store log data persistently on disk
+          in `/var/log/journal/` (`true`) or only in a volatile,
+          in-memory location (`false`). See also `journald_per_user`.
+      journald_max_disk_size:
+        type: int
+        default: 0
+        description: >
+          The maximum amount of disk space, in megabytes, that journal
+          files are allowed to occupy before old files are deleted. A
+          value of `0` leaves the default sizing calculation described
+          in journald.conf(5) in effect.
+      journald_max_files:
+        type: int
+        default: 0
+        description: >
+          The maximum number of journal files that can be kept while
+          respecting the disk usage limits. A value of `0` leaves the
+          journald.conf(5) default in effect.
+      journald_max_file_size:
+        type: int
+        default: 0
+        description: >
+          The maximum size, in megabytes, of a single journal file. A
+          value of `0` leaves the journald.conf(5) default in effect.
+      journald_per_user:
+        type: bool
+        default: false
+        description: >
+          Whether journald should keep log data separate for each
+          user, allowing unprivileged users to read the system log
+          from their own user services. This corresponds to the
+          `SplitMode` setting in journald.conf(5). Per-user journal
+          files are only available when `journald_persistent` is
+          `true`.
+      journald_compression:
+        type: bool
+        default: true
+        description: >
+          Whether journald should compress data objects that are
+          larger than 512 bytes before storing them.
+      journald_sync_interval:
+        type: int
+        default: 0
+        description: >
+          The time span, in minutes, after which journald
+          synchronizes the currently used journal file to disk. A
+          value of `0` leaves the currently configured value
+          unchanged. Only applicable when `journald_persistent` is
+          `true`.
+      journald_forward_to_syslog:
+        type: bool
+        default: false
+        description: >
+          Whether log messages received by journald should also be
+          forwarded to a traditional syslog daemon.
+      journald_rate_limit_interval_sec:
+        type: int
+        default: 30
+        description: >
+          The time interval, in seconds, within which only
+          `journald_rate_limit_burst` messages from a service are
+          handled. See journald.conf(5) for more information.
+      journald_rate_limit_burst:
+        type: int
+        default: 10000
+        description: >
+          The maximum number of messages from a service that are
+          handled within the interval defined by
+          `journald_rate_limit_interval_sec`. See journald.conf(5)
+          for more information.
+      journald_keep_free:
+        type: int
+        default: 0
+        description: >
+          The amount of file system space, in megabytes, that should
+          be kept free on the volume used for journal storage. A
+          value of `0` leaves the journald.conf(5) default in effect.
+      journald_max_retention:
+        type: int
+        default: 0
+        description: >
+          The maximum length of time, in minutes, that journal
+          entries are retained before they are deleted. A value of
+          `0` leaves the journald.conf(5) default in effect.

@@ -3,6 +3,9 @@
 - name: Set platform/version specific variables
   include_tasks: tasks/set_vars.yml
 
+- name: Validate role parameters
+  include_tasks: tasks/assert_role_vars.yml
+
 - name: Warn if journald_sync_interval is set in volatile mode
   debug:
     msg: >-

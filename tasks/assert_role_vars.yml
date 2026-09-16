@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: MIT
+---
+# journald.conf(5) disk size, file count, and time span settings do not
+# accept negative values. meta/argument_specs.yml already ensures these
+# variables are integers; the checks below ensure they are non-negative.
+- name: Assert journald_max_disk_size is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_max_disk_size | int >= 0
+    fail_msg: >-
+      journald_max_disk_size must be a non-negative integer,
+      got {{ journald_max_disk_size }}
+
+- name: Assert journald_max_files is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_max_files | int >= 0
+    fail_msg: >-
+      journald_max_files must be a non-negative integer,
+      got {{ journald_max_files }}
+
+- name: Assert journald_max_file_size is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_max_file_size | int >= 0
+    fail_msg: >-
+      journald_max_file_size must be a non-negative integer,
+      got {{ journald_max_file_size }}
+
+- name: Assert journald_sync_interval is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_sync_interval | int >= 0
+    fail_msg: >-
+      journald_sync_interval must be a non-negative integer,
+      got {{ journald_sync_interval }}
+
+- name: Assert journald_rate_limit_interval_sec is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_rate_limit_interval_sec | int >= 0
+    fail_msg: >-
+      journald_rate_limit_interval_sec must be a non-negative integer,
+      got {{ journald_rate_limit_interval_sec }}
+
+- name: Assert journald_rate_limit_burst is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_rate_limit_burst | int >= 0
+    fail_msg: >-
+      journald_rate_limit_burst must be a non-negative integer,
+      got {{ journald_rate_limit_burst }}
+
+- name: Assert journald_keep_free is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_keep_free | int >= 0
+    fail_msg: >-
+      journald_keep_free must be a non-negative integer,
+      got {{ journald_keep_free }}
+
+- name: Assert journald_max_retention is a non-negative integer
+  ansible.builtin.assert:
+    that:
+      - journald_max_retention | int >= 0
+    fail_msg: >-
+      journald_max_retention must be a non-negative integer,
+      got {{ journald_max_retention }}
