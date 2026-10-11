@@ -99,3 +99,11 @@ argument_specs:
           The maximum length of time, in minutes, that journal
           entries are retained before they are deleted. A value of
           `0` leaves the journald.conf(5) default in effect.
+      journald_transactional_update_reboot_ok:
+        type: raw
+        default: null
+        description: >
+          Whether to permit reboots required by transactional updates. Set
+          to `true` to allow reboots, `false` to disallow reboots, or
+          leave unset so that the role will fail to ensure the reboot
+          requirement is not overlooked. Accepts a boolean value or `null`.

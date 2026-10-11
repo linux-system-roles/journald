@@ -23,6 +23,10 @@ galaxy_info:
     - el10
     - fedora
     - journald
+    - leap15
+    - leap16
     - logging
     - rhel
+    - sles
+    - sles16
 allow_duplicates: true
