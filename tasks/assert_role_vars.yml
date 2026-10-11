@@ -66,3 +66,14 @@
     fail_msg: >-
       journald_max_retention must be a non-negative integer,
       got {{ journald_max_retention }}
+
+- name: Assert journald_transactional_update_reboot_ok is null or a boolean
+  ansible.builtin.assert:
+    that:
+      - >-
+        (journald_transactional_update_reboot_ok is none)
+        or (journald_transactional_update_reboot_ok is sameas true)
+        or (journald_transactional_update_reboot_ok is sameas false)
+    fail_msg: >-
+      journald_transactional_update_reboot_ok must be null or a boolean,
+      got {{ journald_transactional_update_reboot_ok | type_debug }}

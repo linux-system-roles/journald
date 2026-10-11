@@ -86,6 +86,14 @@ unless otherwise indicated.
   sets how long journal entries can be retained before they are deleted.
   No implicit value is configured by the role.
 
+- `journald_transactional_update_reboot_ok` - boolean variable, handles reboots
+  required by transactional updates. If a transactional update requires a
+  reboot, the role reboots when it is `true`. If it is `false`, the role
+  notifies the user that a reboot is required, allowing for custom handling of
+  the reboot requirement. If it is not set, the role fails to ensure the reboot
+  requirement is not overlooked. Ignored on systems without transactional
+  updates. Defaults to `null`.
+
 ## Example Playbook
 
 ```yaml

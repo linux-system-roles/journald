@@ -12,3 +12,6 @@ journald_rate_limit_interval_sec: 30
 journald_rate_limit_burst: 10000
 journald_keep_free: 0
 journald_max_retention: 0
+
+# Transactional update reboot: true reboots, false only notifies, null fails
+journald_transactional_update_reboot_ok: null
