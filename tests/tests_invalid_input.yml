@@ -2,6 +2,18 @@
 ---
 - name: Verify invalid parameters are rejected
   hosts: all
+  vars:
+    # Failure details have different shapes across Ansible versions.
+    __invalid_input_failure_text: >-
+      {{
+        (
+          [ansible_failed_result.msg | d(''),
+           ansible_failed_result.msg.msg | d('')]
+          + (ansible_failed_result.results | d([])
+             | selectattr('msg', 'defined')
+             | map(attribute='msg') | list)
+        ) | join(' ')
+      }}
   tasks:
     - name: Run invalid input tests
       block:
@@ -40,8 +52,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_persistent_type_failed: true
                   when: >-
-                    'journald_persistent' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'journald_persistent'" in __invalid_input_failure_text
+                    and "we were unable to convert to bool" in
+                    __invalid_input_failure_text
 
             - name: Assert invalid journald_persistent type was rejected
               ansible.builtin.assert:
@@ -63,8 +76,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_per_user_type_failed: true
                   when: >-
-                    'journald_per_user' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'journald_per_user'" in __invalid_input_failure_text
+                    and "we were unable to convert to bool" in
+                    __invalid_input_failure_text
 
             - name: Assert invalid journald_per_user type was rejected
               ansible.builtin.assert:
@@ -86,8 +100,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_compression_type_failed: true
                   when: >-
-                    'journald_compression' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'journald_compression'" in __invalid_input_failure_text
+                    and "we were unable to convert to bool" in
+                    __invalid_input_failure_text
 
             - name: Assert invalid journald_compression type was rejected
               ansible.builtin.assert:
@@ -109,8 +124,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_forward_type_failed: true
                   when: >-
-                    'journald_forward_to_syslog' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'journald_forward_to_syslog'" in __invalid_input_failure_text
+                    and "we were unable to convert to bool" in
+                    __invalid_input_failure_text
 
             - name: Assert invalid journald_forward_to_syslog type was rejected
               ansible.builtin.assert:
@@ -132,8 +148,9 @@
                   ansible.builtin.set_fact:
                     __invalid_input_max_disk_size_type_failed: true
                   when: >-
-                    'journald_max_disk_size' in
-                    (ansible_failed_result | default({}) | to_json)
+                    "argument 'journald_max_disk_size'" in __invalid_input_failure_text
+                    and "we were unable to convert to int" in
+                    __invalid_input_failure_text
 
             - name: Assert invalid journald_max_disk_size type was rejected
               ansible.builtin.assert:
@@ -160,7 +177,7 @@
                 __invalid_input_max_disk_size_range_failed: true
               when: >-
                 'journald_max_disk_size must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_max_disk_size was rejected
           ansible.builtin.assert:
@@ -183,7 +200,7 @@
                 __invalid_input_max_files_range_failed: true
               when: >-
                 'journald_max_files must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_max_files was rejected
           ansible.builtin.assert:
@@ -206,7 +223,7 @@
                 __invalid_input_max_file_size_range_failed: true
               when: >-
                 'journald_max_file_size must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_max_file_size was rejected
           ansible.builtin.assert:
@@ -230,7 +247,7 @@
                 __invalid_input_sync_interval_range_failed: true
               when: >-
                 'journald_sync_interval must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_sync_interval was rejected
           ansible.builtin.assert:
@@ -254,7 +271,7 @@
               when: >-
                 'journald_rate_limit_interval_sec must be a non-negative
                 integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_rate_limit_interval_sec was rejected
           ansible.builtin.assert:
@@ -279,7 +296,7 @@
                 __invalid_input_rate_limit_burst_range_failed: true
               when: >-
                 'journald_rate_limit_burst must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_rate_limit_burst was rejected
           ansible.builtin.assert:
@@ -302,7 +319,7 @@
                 __invalid_input_keep_free_range_failed: true
               when: >-
                 'journald_keep_free must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_keep_free was rejected
           ansible.builtin.assert:
@@ -325,7 +342,7 @@
                 __invalid_input_max_retention_range_failed: true
               when: >-
                 'journald_max_retention must be a non-negative integer' in
-                (ansible_failed_result | default({}) | to_json)
+                __invalid_input_failure_text
 
         - name: Assert negative journald_max_retention was rejected
           ansible.builtin.assert:
