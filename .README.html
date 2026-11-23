@@ -226,6 +226,14 @@ free if the system (persistent or volatile) is close to filling up. See
 <li><p><code>journald_max_retention</code> - integer variable, in
 minutes, sets how long journal entries can be retained before they are
 deleted. No implicit value is configured by the role.</p></li>
+<li><p><code>journald_transactional_update_reboot_ok</code> - boolean
+variable, handles reboots required by transactional updates. If a
+transactional update requires a reboot, the role reboots when it is
+<code>true</code>. If it is <code>false</code>, the role notifies the
+user that a reboot is required, allowing for custom handling of the
+reboot requirement. If it is not set, the role fails to ensure the
+reboot requirement is not overlooked. Ignored on systems without
+transactional updates. Defaults to <code>null</code>.</p></li>
 </ul>
 <h1 id="example-playbook">Example Playbook</h1>
 <div class="sourceCode" id="cb2"><pre
